@@ -18,7 +18,7 @@ const { data, pending, refresh } = await useAsyncData(
         repliesNum: thread.querySelector(".xi2").textContent,
       })
     });
-    console.log(data);
+    // console.log(data);
     return data
   }
 )
@@ -26,12 +26,11 @@ const { data, pending, refresh } = await useAsyncData(
 </script>
 
 <template>
-  <div v-for="thread in data">
-    <div class="flex">
-      <a :href="thread.link">{{ thread.title }}</a>
-      <div>{{ thread.repliesNum }}</div>
+  <div class="m-4 text-slate-600 text-center">
+    <div class="flex" v-for="thread in data">
+      <a class="w-4/5" :href="thread.link">{{ thread.title }}</a>
+      <div class="w-1/5">{{ thread.repliesNum }}</div>
     </div>
-    <!-- <div v-html="thread.innerHTML"> -->
-    <!-- </div> -->
   </div>
+  
 </template>
