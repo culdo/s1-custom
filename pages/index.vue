@@ -8,15 +8,30 @@ const { data, pending, refresh } = await useAsyncData(
     )
     const text = await res.text()
     const dom = new JSDOM(text);
-    const content = dom.window.document.body.innerHTML;
-    console.log(content)
-    return content
+    const threads = dom.window.document.querySelectorAll("[id^=normalthread]");
+    
+    let data = [];
+    threads.forEach(thread => {
+      data.push({
+        title: thread.querySelector("a.s.xst").textContent,
+        link: thread.querySelector("a.s.xst").href,
+        repliesNum: thread.querySelector(".xi2").textContent,
+      })
+    });
+    console.log(data);
+    return data
   }
 )
 
 </script>
 
 <template>
-  <div v-html="data">
+  <div v-for="thread in data">
+    <div class="flex">
+      <a :href="thread.link">{{ thread.title }}</a>
+      <div>{{ thread.repliesNum }}</div>
+    </div>
+    <!-- <div v-html="thread.innerHTML"> -->
+    <!-- </div> -->
   </div>
 </template>
