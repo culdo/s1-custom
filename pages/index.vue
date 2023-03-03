@@ -14,7 +14,7 @@ const { data, pending, refresh } = await useAsyncData(
     threads.forEach(thread => {
       data.push({
         title: thread.querySelector("a.s.xst").textContent,
-        link: thread.querySelector("a.s.xst").href,
+        link: thread.querySelector("a.s.xst").href.split(".html")[0],
         repliesNum: thread.querySelector(".xi2").textContent,
       })
     });
@@ -28,7 +28,7 @@ const { data, pending, refresh } = await useAsyncData(
 <template>
   <div class="m-4 text-slate-600 text-center">
     <div class="flex" v-for="thread in data">
-      <a class="w-4/5" :href="thread.link">{{ thread.title }}</a>
+      <a class="w-4/5" :href="'/2b/'+thread.link">{{ thread.title }}</a>
       <div class="w-1/5">{{ thread.repliesNum }}</div>
     </div>
   </div>
