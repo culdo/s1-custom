@@ -21,6 +21,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  permissions:
+    contents: write
   # Single deploy job since we're just deploying
   deploy:
     environment:
