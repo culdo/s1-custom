@@ -1,5 +1,6 @@
 <script setup>
-const JSDOM = require('jsdom').JSDOM; 
+import {parseHTML} from 'linkedom'
+
 const route = useRoute();
 const isShowImg = ref(false);
 function toggleShowImg() {
@@ -11,7 +12,7 @@ const { data, pending, refresh } = await useAsyncData(
   async () => {
     const res = await fetch(postOrigUrl);
     const text = await res.text();
-    const dom = new JSDOM(text);
+    const dom = parseHTML(text);
     const posts = dom.window.document.querySelectorAll("[id^=post_]");
     
     let data = [];

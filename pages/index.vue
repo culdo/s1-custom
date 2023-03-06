@@ -1,5 +1,5 @@
 <script setup>
-const JSDOM = require('jsdom').JSDOM; 
+import {parseHTML} from 'linkedom'
 
 const { data, pending, refresh } = await useAsyncData(
   async () => {
@@ -7,18 +7,18 @@ const { data, pending, refresh } = await useAsyncData(
       'https://www.saraba1st.com/2b/forum-6-1.html'
     )
     const text = await res.text()
-    const dom = new JSDOM(text);
-    const threads = dom.window.document.querySelectorAll("[id^=normalthread]");
+    const dom = parseHTML(text)
+    const threads = dom.window.document.querySelectorAll("[id^=normalthread]")
     
-    let data = [];
+    let data = []
     threads.forEach(thread => {
       data.push({
         title: thread.querySelector("a.s.xst").textContent,
         link: thread.querySelector("a.s.xst").href.split(".html")[0],
         repliesNum: thread.querySelector(".xi2").textContent,
       })
-    });
-    // console.log(data);
+    })
+    // console.log(data)
     return data
   }
 )
