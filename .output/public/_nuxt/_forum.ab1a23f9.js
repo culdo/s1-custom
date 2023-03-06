@@ -1,0 +1,1 @@
+import{h as n,o,b as r,e as t,t as e}from"./entry.9ccac378.js";const c={async asyncData({params:s}){return{slug:s.slug}}};function l(s,a,u,p,i,_){return o(),r("div",null,[t("h1",null,e(this.slug),1),t("p",null,"Path: "+e(s.$route.path),1)])}const d=n(c,[["render",l]]);export{d as default};
