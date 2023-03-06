@@ -4,7 +4,13 @@ export default defineNuxtConfig({
     ],
     
     ssr: false,
-  
+    
+    runtimeConfig: {
+      public: {
+        urlBase: process.env.NUXT_APP_BASE_URL
+      }
+    },
+    
     postcss: {
       plugins: {
         tailwindcss: {},
