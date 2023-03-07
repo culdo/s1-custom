@@ -23,7 +23,7 @@ const load = async $state => {
     let procedPosts = [];
     posts.forEach((post) => {
       if(post.hasChildNodes()) {
-        let postMsg = post.querySelector("[id^=postmessage_]");
+        let postMsg = post.querySelector(".plc");
         if(postMsg) {
           // fill src by file url
           postMsg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
@@ -32,13 +32,14 @@ const load = async $state => {
           })
         }else{
           postMsg = post.querySelector(".plc");
+          console.log(post);
         }
         procedPosts.push(postMsg);
       }
     });
     console.log(procedPosts);
 
-    if (procedPosts.length < 27) {
+    if (procedPosts.length < 30) {
       $state.complete();
     } else {
       allPosts.value.push(...procedPosts);
