@@ -8,15 +8,15 @@ const isShowImg = ref(false);
 
 
 let page = route.params.page;
-let postOrigUrl;
+let threadOrigUrl;
 
 const load = async $state => {
   console.log("loading...");
 
   try {
-    postOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
+    threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
     
-    const response = await fetch(postOrigUrl);
+    const response = await fetch(threadOrigUrl);
     const text = await response.text();
     const dom = parseHTML(text);
     const posts = dom.window.document.querySelectorAll("[id^=post_]");
@@ -53,11 +53,12 @@ const load = async $state => {
     });
     console.log(procedPosts);
 
+    allPosts.value.push(...procedPosts);
+
     // one page has 30 posts
     if (procedPosts.length < 30) {
       $state.complete();
     } else {
-      allPosts.value.push(...procedPosts);
       $state.loaded();
     }
     page++;
@@ -84,7 +85,7 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <div class="flex gap-4">
-      <a :href="postOrigUrl" target="_blank" >Orignal Post</a>
+      <a :href="threadOrigUrl" target="_blank" >Orignal Post</a>
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
     <div class="my-6" v-for="(post, index) in allPosts">
