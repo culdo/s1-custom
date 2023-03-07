@@ -87,10 +87,11 @@ function toggleShowImg() {
       <a :href="postOrigUrl" target="_blank" >Orignal Post</a>
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
-    <div class="my-6" v-for="post in allPosts">
+    <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
         <div>{{ post.author }}</div>
         <div>{{ post.postOn }}</div>
+        <div class="ml-auto">#{{ index+1 }}</div>
       </div>
       <div v-html="post.msg.innerHTML"> 
       </div>
