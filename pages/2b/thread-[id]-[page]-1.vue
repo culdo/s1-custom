@@ -32,7 +32,6 @@ const { data, pending, refresh } = await useAsyncData(
 
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
-  let preprcPosts = [];
   data.value.forEach(postMsg => {
     postMsg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
       if(isShowImg.value){
@@ -41,9 +40,7 @@ function toggleShowImg() {
         img.style.display = "none";
       }
     })
-    preprcPosts.push(postMsg);
   });
-  data.value = preprcPosts;
 }
 
 </script>
