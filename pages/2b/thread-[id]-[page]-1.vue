@@ -23,7 +23,21 @@ const load = async $state => {
     let procedPosts = [];
     posts.forEach((post) => {
       if(post.hasChildNodes()) {
-        let postMsg = post.querySelector(".plc");
+        let postMsg = post.querySelector("[id^=postmessage_]");
+        let author = post.querySelector(".authi").textContent
+        let postOn = post.querySelector("em[id^=authorposton]").textContent.split("发表于 ")[1]
+        let quote = post.querySelector(".quote")
+        if(quote){
+          quote.style.margin = "10px"
+          quote.style.fontSize = "14px"
+          quote.style.borderStyle = "dashed";
+          quote.style.borderWidth = "thin";
+          quote.style.borderColor = "DimGrey";
+        }
+        console.log(author)
+        console.log(postOn)
+        
+        // Is post blocked?
         if(postMsg) {
           // fill src by file url
           postMsg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
@@ -31,14 +45,14 @@ const load = async $state => {
             img.style.display = "none";
           })
         }else{
-          postMsg = post.querySelector(".plc");
-          console.log(post);
+          postMsg = post.querySelector(".pcb");
         }
-        procedPosts.push(postMsg);
+        procedPosts.push({msg: postMsg, author, postOn});
       }
     });
     console.log(procedPosts);
 
+    // one page has 30 posts
     if (procedPosts.length < 30) {
       $state.complete();
     } else {
@@ -53,8 +67,8 @@ const load = async $state => {
 
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
-  allPosts.value.forEach(postMsg => {
-    postMsg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
+  allPosts.value.forEach(post => {
+    post.msg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
       if(isShowImg.value){
         img.style.display = "inline";
       }else{
@@ -72,9 +86,12 @@ function toggleShowImg() {
       <a :href="postOrigUrl" target="_blank" >Orignal Post</a>
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
-    <div class="border-2 my-2" v-for="post in allPosts">
-      <!-- {{ post.content }} -->
-      <div v-html="post.innerHTML"> 
+    <div class="my-6" v-for="post in allPosts">
+      <div class="my-1 flex gap-4 font-medium">
+        <div>{{ post.author }}</div>
+        <div>{{ post.postOn }}</div>
+      </div>
+      <div v-html="post.msg.innerHTML"> 
       </div>
     </div>
     <InfiniteLoading @infinite="load" />
