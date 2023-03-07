@@ -55,7 +55,7 @@ const load = async $state => {
 
     allPosts.value.push(...procedPosts);
 
-    // one page has 30 posts
+    // There are 30 posts in one page
     if (procedPosts.length < 30) {
       $state.complete();
     } else {
