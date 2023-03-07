@@ -18,7 +18,7 @@ const load = async $state => {
     const text = await response.text();
     const dom = parseHTML(text);
     
-    const threads = dom.window.document.querySelectorAll("[id^=normalthread]")
+    const threads = dom.window.document.querySelectorAll("[id^=normalthread_],[id^=stickthread_]")
     console.log(threads)
     let procedThreads = []
     threads.forEach(thread => {
@@ -30,8 +30,8 @@ const load = async $state => {
     })
     allThreads.value.push(...procedThreads);
 
-    // one page has 50 threads - 2 pinned threads
-    if (procedThreads.length < 48) {
+    // one page has 50 threads
+    if (procedThreads.length < 50) {
       $state.complete();
     } else {
       $state.loaded();
