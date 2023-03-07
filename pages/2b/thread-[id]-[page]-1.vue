@@ -6,16 +6,17 @@ let allPosts = ref([]);
 const route = useRoute();
 const isShowImg = ref(false);
 
-const postOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${route.params.page}-1.html`;
 
-let page = 1;
+let page = route.params.page;
+let postOrigUrl;
+
 const load = async $state => {
   console.log("loading...");
 
   try {
-    const response = await fetch(
-      `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
-    );
+    postOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
+    
+    const response = await fetch(postOrigUrl);
     const text = await response.text();
     const dom = parseHTML(text);
     const posts = dom.window.document.querySelectorAll("[id^=post_]");
@@ -87,7 +88,7 @@ function toggleShowImg() {
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
     <div class="my-6" v-for="post in allPosts">
-      <div class="my-1 flex gap-4 font-medium">
+      <div class="my-1 flex gap-2 font-medium">
         <div>{{ post.author }}</div>
         <div>{{ post.postOn }}</div>
       </div>
