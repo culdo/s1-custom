@@ -84,7 +84,7 @@ function toggleShowImg() {
 
 <template>
   <div class="m-4 text-slate-600">
-    <div class="flex gap-4">
+    <div class="flex justify-end sticky top-0 z-50 gap-4 bg-white">
       <a :href="threadOrigUrl" target="_blank" >Orignal Post</a>
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
