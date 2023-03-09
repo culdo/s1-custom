@@ -16,10 +16,12 @@ const load = async $state => {
   try {
     threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
     
-    const response = await fetch(threadOrigUrl);
+    const response = await fetch(threadOrigUrl, {
+      credentials: 'include'
+    });
     const text = await response.text();
     const dom = parseHTML(text);
-    const posts = dom.window.document.querySelectorAll("[id^=post_]");
+    const posts = dom.window.document.querySelectorAll("div[id^=post_]");
     
     let procedPosts = [];
     posts.forEach((post) => {
@@ -63,6 +65,7 @@ const load = async $state => {
     }
     page++;
   } catch (error) {
+    console.log(error);
     $state.error();
   }
 }
@@ -85,7 +88,7 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <div class="flex justify-end sticky top-0 z-50 gap-4 bg-white">
-      <a :href="threadOrigUrl" target="_blank" >Orignal Post</a>
+      <a :href="threadOrigUrl" target="_blank" >Original Post</a>
       <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </div>
     <div class="my-6" v-for="(post, index) in allPosts">
