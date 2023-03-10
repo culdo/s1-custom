@@ -37,8 +37,6 @@ const load = async $state => {
           quote.style.borderWidth = "thin";
           quote.style.borderColor = "DimGrey";
         }
-        console.log(author)
-        console.log(postOn)
         
         // Is post blocked?
         if(postMsg) {
@@ -69,9 +67,11 @@ const load = async $state => {
     $state.error();
   }
 }
+const instance = getCurrentInstance();
 
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
+  console.log(allPosts.value);
   allPosts.value.forEach(post => {
     post.msg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
       if(isShowImg.value){
@@ -81,6 +81,7 @@ function toggleShowImg() {
       }
     })
   });
+  instance?.proxy?.$forceUpdate();
 }
 
 </script>
@@ -88,8 +89,21 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <div class="flex justify-end sticky top-0 z-50 gap-4 bg-white">
-      <a :href="threadOrigUrl" target="_blank" >Original Post</a>
-      <button @click="toggleShowImg">{{ isShowImg ? "Hide" : "Show" }} Img</button>
+      <Menu>
+        <a :href="threadOrigUrl" target="_blank" class="
+                    block
+                      px-4
+                      py-2
+                      text-sm
+                      hover:bg-blue-400 hover:text-blue-100">Original Post</a>
+        <button @click="toggleShowImg" class="
+            block
+              px-4
+              py-2
+              text-sm
+              hover:bg-blue-400 hover:text-blue-100
+        ">{{ isShowImg ? "Hide" : "Show" }} Img</button>
+      </Menu>
     </div>
     <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
