@@ -1,5 +1,5 @@
 <script setup>
-import {parseHTML} from 'linkedom'
+import { parseHTML } from 'linkedom'
 import InfiniteLoading from "v3-infinite-loading";
 let allPosts = ref([]);
 
@@ -15,40 +15,40 @@ const load = async $state => {
 
   try {
     threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
-    
+
     const response = await fetch(threadOrigUrl, {
       credentials: 'include'
     });
     const text = await response.text();
     const dom = parseHTML(text);
     const posts = dom.window.document.querySelectorAll("div[id^=post_]");
-    
+
     let procedPosts = [];
     posts.forEach((post) => {
-      if(post.hasChildNodes()) {
+      if (post.hasChildNodes()) {
         let postMsg = post.querySelector("[id^=postmessage_]");
         let author = post.querySelector(".authi").textContent
         let postOn = post.querySelector("em[id^=authorposton]").textContent.split("发表于 ")[1]
         let quote = post.querySelector(".quote")
-        if(quote){
+        if (quote) {
           quote.style.margin = "10px"
           quote.style.fontSize = "14px"
           quote.style.borderStyle = "dashed";
           quote.style.borderWidth = "thin";
           quote.style.borderColor = "DimGrey";
         }
-        
+
         // Is post blocked?
-        if(postMsg) {
+        if (postMsg) {
           // fill src by file url
           postMsg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
             img.src = img.getAttribute("file");
             img.style.display = "none";
           })
-        }else{
+        } else {
           postMsg = post.querySelector(".pcb");
         }
-        procedPosts.push({msg: postMsg, author, postOn});
+        procedPosts.push({ msg: postMsg, author, postOn });
       }
     });
     console.log(procedPosts);
@@ -74,9 +74,9 @@ function toggleShowImg() {
   console.log(allPosts.value);
   allPosts.value.forEach(post => {
     post.msg.querySelectorAll("img[id^=aimg_]").forEach((img) => {
-      if(isShowImg.value){
+      if (isShowImg.value) {
         img.style.display = "inline";
-      }else{
+      } else {
         img.style.display = "none";
       }
     })
@@ -88,43 +88,41 @@ function toggleShowImg() {
 
 <template>
   <div class="m-4 text-slate-600">
-    <div class="flex justify-end sticky top-0 z-50 gap-4 bg-white">
+    <div class="flex justify-end sticky top-0 z-50 gap-4">
       <Menu>
         <a :href="threadOrigUrl" target="_blank" class="
-                    block
+                      block
                       px-4
                       py-2
                       text-sm
                       hover:bg-blue-400 hover:text-blue-100">Original Post</a>
         <button @click="toggleShowImg" class="
-            block
+              block
               px-4
               py-2
               text-sm
-              hover:bg-blue-400 hover:text-blue-100
-        ">{{ isShowImg ? "Hide" : "Show" }} Img</button>
+              hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
       </Menu>
     </div>
     <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
         <div>{{ post.author }}</div>
         <div>{{ post.postOn }}</div>
-        <div class="ml-auto">#{{ index+1 }}</div>
+        <div class="ml-auto">#{{ index + 1 }}</div>
       </div>
-      <div v-html="post.msg.innerHTML"> 
+      <div v-html="post.msg.innerHTML">
       </div>
     </div>
     <InfiniteLoading @infinite="load" />
   </div>
-  
 </template>
 
 <style>
-  img {
-    display: inline;
-  }
+img {
+  display: inline;
+}
 
-  img[id^=aimg_] {
-    width: 800px;
-  }
+img[id^=aimg_] {
+  width: 800px;
+}
 </style>
