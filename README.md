@@ -6,6 +6,7 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 需搭配下列兩款瀏覽器擴充使用：
 1. [Allow CORS](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en)：允許在此自定義網站取得論壇數據
 2. [EditThisCookie](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg?hl=en)：允許查看需要權限的討論串
+    * 使用網頁版登入後開啟此擴充功能找到`B7Y9_2132_saltkey`的cookie，將其`Same Site`設為`No restriction`，並點選左上角鎖頭將其設為唯讀
 ## Setup
 Make sure to install the dependencies:
 
