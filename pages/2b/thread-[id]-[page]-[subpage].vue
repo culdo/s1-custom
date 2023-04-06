@@ -14,7 +14,7 @@ const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-1.html`
+    threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-${route.params.subpage}.html`
 
     const response = await fetch(threadOrigUrl, {
       credentials: 'include'
