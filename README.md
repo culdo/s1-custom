@@ -31,3 +31,4 @@ Related file locate at `.github/workflows`
 - [x] three dots menu
 - [ ] jump to specific post
 - [ ] jump to specific page
+- [ ] cast dark magic
