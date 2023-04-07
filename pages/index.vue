@@ -12,10 +12,10 @@ const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = apiBaseUrl + `forum-6-${page}.html`
+    threadOrigUrl = apiBaseUrl + `index.php?module=forumdisplay&version=4&filter=typeid&tpp=&fid=6&page=${page}`
     
     const response = await fetch(threadOrigUrl);
-    const text = await response.text();
+    const data = await response.json();
     const dom = parseHTML(text);
     
     const threads = dom.window.document.querySelectorAll("[id^=normalthread_],[id^=stickthread_]")
