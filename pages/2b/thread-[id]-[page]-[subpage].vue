@@ -89,7 +89,6 @@ function toggleShowImg() {
 
 <template>
   <div class="m-4 text-slate-600">
-    <div class="flex justify-end sticky top-0 z-50 gap-4">
       <Menu>
         <a :href="threadOrigUrl" target="_blank" class="
                       block
@@ -104,7 +103,6 @@ function toggleShowImg() {
               text-sm
               hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
       </Menu>
-    </div>
     <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
         <a :href="post.authorSpace">{{ post.author }}</a>
