@@ -32,3 +32,4 @@ Related file locate at `.github/workflows`
 - [ ] jump to specific post
 - [ ] jump to specific page
 - [ ] cast dark magic
+- [x] link post author to author space
