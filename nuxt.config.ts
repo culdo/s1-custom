@@ -27,4 +27,5 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  sourcemap: true,
 })
