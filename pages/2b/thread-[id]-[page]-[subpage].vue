@@ -89,23 +89,23 @@ function toggleShowImg() {
 
 <template>
   <div class="m-4 text-slate-600">
-      <Menu>
-        <a :href="threadOrigUrl" target="_blank" class="
-                      block
-                      px-4
-                      py-2
-                      text-sm
-                      hover:bg-blue-400 hover:text-blue-100">Original Post</a>
-        <button @click="toggleShowImg" class="
-              block
-              px-4
-              py-2
-              text-sm
-              hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
-      </Menu>
+    <Menu>
+      <a :href="threadOrigUrl" target="_blank" class="
+                    block
+                    px-4
+                    py-2
+                    text-sm
+                    hover:bg-blue-400 hover:text-blue-100">Original Post</a>
+      <button @click="toggleShowImg" class="
+            block
+            px-4
+            py-2
+            text-sm
+            hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
+    </Menu>
     <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
-        <a :href="post.authorSpace">{{ post.author }}</a>
+        <a :href="apiBaseUrl + post.authorSpace" target="_blank">{{ post.author }}</a>
         <div>{{ post.postOn }}</div>
         <div class="ml-auto">#{{ index + 1 }}</div>
       </div>
