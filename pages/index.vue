@@ -12,7 +12,7 @@ const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = `https://www.saraba1st.com/2b/forum-6-${page}.html`
+    threadOrigUrl = apiBaseUrl + `forum-6-${page}.html`
     
     const response = await fetch(threadOrigUrl);
     const text = await response.text();

@@ -14,7 +14,7 @@ const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = `https://www.saraba1st.com/2b/thread-${route.params.id}-${page}-${route.params.subpage}.html`
+    threadOrigUrl = apiBaseUrl + `thread-${route.params.id}-${page}-${route.params.subpage}.html`
 
     const response = await fetch(threadOrigUrl, {
       credentials: 'include'
@@ -27,12 +27,13 @@ const load = async $state => {
     posts.forEach((post) => {
       if (post.hasChildNodes()) {
         let postMsg = post.querySelector("[id^=postmessage_]");
-        let author = post.querySelector(".authi").textContent
-        let postOn = post.querySelector("em[id^=authorposton]").textContent.split("发表于 ")[1]
-        let quote = post.querySelector(".quote")
+        let author = post.querySelector(".authi").textContent;
+        let authorSpace = post.querySelector("a.xw1").href;
+        let postOn = post.querySelector("em[id^=authorposton]").textContent.split("发表于 ")[1];
+        let quote = post.querySelector(".quote");
         if (quote) {
-          quote.style.margin = "10px"
-          quote.style.fontSize = "14px"
+          quote.style.margin = "10px";
+          quote.style.fontSize = "14px";
           quote.style.borderStyle = "dashed";
           quote.style.borderWidth = "thin";
           quote.style.borderColor = "DimGrey";
@@ -48,7 +49,7 @@ const load = async $state => {
         } else {
           postMsg = post.querySelector(".pcb");
         }
-        procedPosts.push({ msg: postMsg, author, postOn });
+        procedPosts.push({ msg: postMsg, author, postOn, authorSpace });
       }
     });
     console.log(procedPosts);
@@ -106,7 +107,7 @@ function toggleShowImg() {
     </div>
     <div class="my-6" v-for="(post, index) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
-        <div>{{ post.author }}</div>
+        <a :href="post.authorSpace">{{ post.author }}</a>
         <div>{{ post.postOn }}</div>
         <div class="ml-auto">#{{ index + 1 }}</div>
       </div>
