@@ -1,6 +1,10 @@
 <script setup>
-import { parseHTML } from 'linkedom'
 import InfiniteLoading from "v3-infinite-loading";
+
+if(localStorage.getItem("sid") === undefined) {
+  navigateTo("/login")
+}
+
 let allPosts = ref([]);
 
 const route = useRoute();
@@ -14,14 +18,22 @@ const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = getApiPostList(route.params.id, page);
+    threadOrigUrl = getApiPostList();
+
+    let formData = new FormData();
+    formData.append('sid', localStorage.getItem("sid"));
+    formData.append('tid', route.params.id);
+    formData.append('page', page);
 
     const response = await fetch(threadOrigUrl, {
-      credentials: 'include'
+      method: "POST",
+      credentials: 'include',
+      body:formData,
     });
     const data = await response.json();
+    console.log(data)
 
-    allPosts.value.push(...data.Variables.postlist);
+    allPosts.value.push(...data.data.list);
 
     // There are 30 posts in one page
     if (data.Variables.postlist.length < 30) {
@@ -73,8 +85,8 @@ function toggleShowImg() {
     <div class="my-6" v-for="(post) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
         <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
-        <div>{{ post.dateline }}</div>
-        <div class="ml-auto">#{{ post.number }}</div>
+        <div>{{  }}</div>
+        <div class="ml-auto">#{{ post.position }}</div>
       </div>
       <div v-html="post.message">
       </div>
