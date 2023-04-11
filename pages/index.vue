@@ -20,10 +20,10 @@ const load = async $state => {
     const data = await response.json();
     console.log(data);
 
-    allThreads.value = data.Variables.forum_threadlist;
+    allThreads.value.push(...data.Variables.forum_threadlist);
 
     // There are 50 threads in one page
-    if (procedThreads.length < 50) {
+    if (allThreads.value.length < 50) {
       $state.complete();
     } else {
       $state.loaded();
