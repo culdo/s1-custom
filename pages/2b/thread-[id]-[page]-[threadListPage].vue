@@ -47,21 +47,16 @@ const load = async $state => {
     $state.error();
   }
 }
-const instance = getCurrentInstance();
 
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
-  console.log(allPosts.value);
-  allPosts.value.forEach(post => {
-    post.message.querySelectorAll("img[id^=aimg_]").forEach((img) => {
-      if (isShowImg.value) {
-        img.style.display = "inline";
-      } else {
-        img.style.display = "none";
-      }
-    })
-  });
-  instance?.proxy?.$forceUpdate();
+  console.log(isShowImg.value);
+  var allImg = document.querySelector(".post")
+  if(isShowImg.value) {
+    allImg.classList.remove("hideImg")
+  } else {
+    allImg.classList.add("hideImg")
+  }
 }
 
 </script>
@@ -88,7 +83,7 @@ function toggleShowImg() {
         <div>{{ getPostDate(post.dateline) }}</div>
         <div class="ml-auto">#{{ post.position }}</div>
       </div>
-      <div v-html="post.message">
+      <div class="post hideImg" v-html="post.message">
       </div>
     </div>
     <InfiniteLoading @infinite="load" />
@@ -103,4 +98,9 @@ img {
 img[id^=aimg_] {
   width: 800px;
 }
+
+.hideImg img[id^=aimg_] {
+  display: none;
+}
+
 </style>
