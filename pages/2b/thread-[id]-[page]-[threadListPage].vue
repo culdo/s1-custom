@@ -23,7 +23,7 @@ const load = async $state => {
     let formData = new FormData();
     formData.append('sid', localStorage.getItem("sid"));
     formData.append('tid', route.params.id);
-    formData.append('page', page);
+    formData.append('pageNo', page);
 
     const response = await fetch(threadOrigUrl, {
       method: "POST",
@@ -35,8 +35,8 @@ const load = async $state => {
 
     allPosts.value.push(...data.data.list);
 
-    // There are 30 posts in one page
-    if (data.Variables.postlist.length < 30) {
+    // There are 30 posts in one page if it's not end
+    if (data.data.list < 30) {
       $state.complete();
     } else {
       $state.loaded();
@@ -85,7 +85,7 @@ function toggleShowImg() {
     <div class="my-6" v-for="(post) in allPosts">
       <div class="my-1 flex gap-2 font-medium">
         <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
-        <div>{{  }}</div>
+        <div>{{ getPostDate(post.dateline) }}</div>
         <div class="ml-auto">#{{ post.position }}</div>
       </div>
       <div v-html="post.message">

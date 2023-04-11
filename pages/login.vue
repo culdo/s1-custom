@@ -1,6 +1,4 @@
 <script setup>
-import axios from 'axios'
-
 const usernameRef = ref("")
 const passwordRef = ref("")
 const loginRef = ref(null)
@@ -14,7 +12,7 @@ const updateConfig = async () => {
     
     const data = await response.json()
 
-    console.log(localStorage.getItem("sid"))
+    console.log(data)
     localStorage.setItem("sid", data.data.sid)
     console.log(localStorage.getItem("sid"))
     
