@@ -56,12 +56,14 @@ const load = async $state => {
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
   console.log(isShowImg.value);
-  var allImg = document.querySelector(".post")
-  if(isShowImg.value) {
-    allImg.classList.remove("hideImg")
-  } else {
-    allImg.classList.add("hideImg")
-  }
+  var allPost = document.querySelectorAll(".post")
+  allPost.forEach((post) => {
+    if(isShowImg.value) {
+      post.classList.remove("hideImg")
+    } else {
+      post.classList.add("hideImg")
+    }
+  })
 }
 
 </script>
@@ -104,7 +106,7 @@ img[id^=aimg_] {
   width: 800px;
 }
 
-.hideImg img[id^=aimg_] {
+.hideImg img[id^=aimg_], .hideImg img[src^="https://img.saraba1st.com/"]{
   display: none;
 }
 
