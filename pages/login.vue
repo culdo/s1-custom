@@ -5,7 +5,7 @@ const loginRef = ref(null)
 
 const updateConfig = async () => {
 
-    const response = await fetch('https://app.saraba1st.com/2b/api/app/user/login', {
+    const response = await fetch(apiLogin, {
       method: "POST",
       body: new FormData(loginRef.value)
     });

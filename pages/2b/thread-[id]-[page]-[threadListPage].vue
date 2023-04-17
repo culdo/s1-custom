@@ -12,20 +12,19 @@ const isShowImg = ref(false);
 
 
 let page = route.params.page;
-let threadOrigUrl;
+let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${page}-${route.params.threadListPage}.html`
 
 const load = async $state => {
   console.log("loading...");
 
   try {
-    threadOrigUrl = getApiPostList();
 
     let formData = new FormData();
     formData.append('sid', localStorage.getItem("sid"));
     formData.append('tid', route.params.id);
     formData.append('pageNo', page);
 
-    const response = await fetch(threadOrigUrl, {
+    const response = await fetch(apiPostList, {
       method: "POST",
       credentials: 'include',
       body:formData,
