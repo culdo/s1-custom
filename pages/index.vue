@@ -37,10 +37,9 @@ const load = async $state => {
 </script>
 
 <template>
-  <div class="m-4 text-slate-600 text-center">
-    <div class="flex" v-for="thread in allThreads">
-      <a class="w-4/5" :href="getThreadLink(thread)">{{ thread.subject }}</a>
-      <div class="w-1/5">{{ thread.replies }}</div>
+  <div class="m-4 text-slate-600">
+    <div class="flex justify-center" v-for="thread in allThreads">
+      <a :href="getThreadLink(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }}</b></a>
     </div>
     <InfiniteLoading @infinite="load" />
   </div>
