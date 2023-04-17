@@ -31,6 +31,11 @@ const load = async $state => {
       body:formData,
     });
     const data = await response.json();
+    
+    if(data.code == 501) {
+      navigateTo("/login")
+    }
+
     console.log(data)
 
     allPosts.value.push(...data.data.list);
