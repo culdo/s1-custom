@@ -55,15 +55,6 @@ const load = async $state => {
 
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
-  console.log(isShowImg.value);
-  var allPost = document.querySelectorAll(".post")
-  allPost.forEach((post) => {
-    if(isShowImg.value) {
-      post.classList.remove("hideImg")
-    } else {
-      post.classList.add("hideImg")
-    }
-  })
 }
 
 </script>
@@ -90,7 +81,7 @@ function toggleShowImg() {
         <div>{{ getPostDate(post.dateline) }}</div>
         <div class="ml-auto">#{{ post.position }}</div>
       </div>
-      <div class="post hideImg" v-html="post.message">
+      <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
       </div>
     </div>
     <InfiniteLoading @infinite="load" />
