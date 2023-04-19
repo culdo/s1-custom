@@ -32,10 +32,10 @@ const load = async ($state, isTop) => {
       $state.complete();
     } else {
       if(isTop){
-        allThreads.value.unshift(...data.Variables.forum_threadlist);
+        allThreads.value.unshift(data.Variables.forum_threadlist);
         topPage = page - 1;
       }else{
-        allThreads.value.push(...data.Variables.forum_threadlist);
+        allThreads.value.push(data.Variables.forum_threadlist);
         bottomPage = page + 1;
       }
       $state.loaded();
@@ -52,8 +52,11 @@ const load = async ($state, isTop) => {
 <template>
   <div class="m-4 text-slate-600 flex flex-col items-center" >
     <InfiniteLoading v-if="topPage > 0 && !loading" top=true @infinite="load($event, true)" />
-    <div v-for="thread in allThreads">
-      <a :href="getThreadLink(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }}</b></a>
+    <div class="flex flex-col items-center border-b-2 w-full" v-for="block in allThreads">
+      <div v-for="thread in block">
+        <a :href="getThreadLink(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }}</b></a>
+      </div>
+      <hr>
     </div>
     <InfiniteLoading @infinite="load($event, false)" />
   </div>
