@@ -3,39 +3,43 @@ import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 let allThreads = ref([]);
 
-const config = useRuntimeConfig()
-
-let page = localStorage.getItem("thread-list-page") || 1;
+let page = parseInt(localStorage.getItem("thread-list-page")) || 1;
+let topPage = page - 1;
+let bottomPage = page;
 let threadOrigUrl;
 
 const getThreadLink = (thread) => `2b/thread-${thread.tid}-1-1`
+let loading = true;
 
 const load = async ($state, isTop) => {
   console.log("loading...");
 
+  if(isTop){
+    page = topPage;
+  }else{
+    page = bottomPage;
+  }
   try {
+    localStorage.setItem("thread-list-page", page);
     threadOrigUrl = getApiThreadList(6, page);
-    
+
     const response = await fetch(threadOrigUrl);
     const data = await response.json();
     console.log(data);
 
-
-    if(isTop){
-      if(page > 0 || allThreads.value.length > 0 ) {
-        allThreads.value.unshift(...data.Variables.forum_threadlist);
-        page--;
-      }
-    }else{
-      allThreads.value.push(...data.Variables.forum_threadlist);
-      page++;
-    }
     // There are 50 threads in one page if it's not end
-    if (data.Variables.forum_threadlist < 50 || page < 1) {
+    if (data.Variables.forum_threadlist < 50 ) {
       $state.complete();
     } else {
+      if(isTop){
+        allThreads.value.unshift(...data.Variables.forum_threadlist);
+        topPage = page - 1;
+      }else{
+        allThreads.value.push(...data.Variables.forum_threadlist);
+        bottomPage = page + 1;
+      }
       $state.loaded();
-      localStorage.setItem("thread-list-page", page);
+      loading = false;
     }
   } catch (error) {
     $state.error();
@@ -47,7 +51,7 @@ const load = async ($state, isTop) => {
 
 <template>
   <div class="m-4 text-slate-600 flex flex-col items-center" >
-    <InfiniteLoading top=true @infinite="load($event, true)" />
+    <InfiniteLoading v-if="topPage > 0 && !loading" top=true @infinite="load($event, true)" />
     <div v-for="thread in allThreads">
       <a :href="getThreadLink(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }}</b></a>
     </div>
