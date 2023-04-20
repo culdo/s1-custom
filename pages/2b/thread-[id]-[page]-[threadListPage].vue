@@ -10,14 +10,25 @@ let allPosts = ref([]);
 const route = useRoute();
 const isShowImg = ref(false);
 
+const threadKey = `thread-${route.params.id}-page`;
+let page = parseInt(localStorage.getItem(threadKey) || route.params.page);
 
-let page = route.params.page;
+let scrollTopPage = page - 1;
+let scrollBottomPage = page;
+let loading = true;
+
 let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${page}-${route.params.threadListPage}.html`
 
-const load = async $state => {
+const load = async ($state, isTop=false) => {
   console.log("loading...");
-
+  
+  if(isTop){
+    page = scrollTopPage;
+  }else{
+    page = scrollBottomPage;
+  }
   try {
+    localStorage.setItem(threadKey, page);
 
     let formData = new FormData();
     formData.append('sid', localStorage.getItem("sid"));
@@ -36,16 +47,21 @@ const load = async $state => {
     }
 
     console.log(data)
-
-    allPosts.value.push(data.data.list);
-
+    
     // There are 30 posts in one page if it's not end
     if (data.data.list < 30) {
       $state.complete();
     } else {
+      if(isTop){
+        allPosts.value.unshift(data.data.list);
+        scrollTopPage = page - 1;
+      }else{
+        allPosts.value.push(data.data.list);
+        scrollBottomPage = page + 1;
+      }
       $state.loaded();
+      loading = false;
     }
-    page++;
   } catch (error) {
     console.log(error);
     $state.error();
@@ -74,6 +90,7 @@ function toggleShowImg() {
             text-sm
             hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </Menu>
+    <InfiniteLoading v-if="scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
     <div class="border-b-2 w-full" v-for="block in allPosts">
       <div class="my-6" v-for="post in block">
         <div class="my-1 flex gap-2 font-medium">

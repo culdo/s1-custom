@@ -11,7 +11,7 @@ let threadOrigUrl;
 const getThreadLink = (thread) => `2b/thread-${thread.tid}-1-1`
 let loading = true;
 
-const load = async ($state, isTop) => {
+const load = async ($state, isTop=false) => {
   console.log("loading...");
 
   if(isTop){
@@ -58,7 +58,7 @@ const load = async ($state, isTop) => {
       </div>
       <hr>
     </div>
-    <InfiniteLoading @infinite="load($event, false)" />
+    <InfiniteLoading @infinite="load($event)" />
   </div>
   
 </template>
