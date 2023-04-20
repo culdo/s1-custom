@@ -17,6 +17,7 @@ const pageNum = ref(parseInt(localStorage.getItem(threadKey) || route.params.pag
 let scrollTopPage = pageNum.value - 1;
 let scrollBottomPage = pageNum.value;
 let loading = true;
+let totalReplies;
 
 let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${pageNum.value}-${route.params.threadListPage}.html`
 
@@ -42,6 +43,7 @@ const load = async ($state, isTop=false) => {
       body:formData,
     });
     const data = await response.json();
+    totalReplies = data.data.totalCount;
     
     if(data.code == 501) {
       navigateTo("/login")
@@ -80,7 +82,7 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <Menu>
-      <input v-model="pageNum" type="range" class="slider menu-item" min="0" max="100" />
+      <input v-model="pageNum" type="range" class="slider menu-item" min="1" :max="Math.floor(totalReplies/30)+1" />
       <input v-model="pageNum" type="number" class="menu-item"/>
       <a :href="threadOrigUrl" target="_blank" class="
                     menu-item
