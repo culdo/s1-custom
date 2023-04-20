@@ -37,7 +37,7 @@ const load = async $state => {
 
     console.log(data)
 
-    allPosts.value.push(...data.data.list);
+    allPosts.value.push(data.data.list);
 
     // There are 30 posts in one page if it's not end
     if (data.data.list < 30) {
@@ -74,13 +74,15 @@ function toggleShowImg() {
             text-sm
             hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </Menu>
-    <div class="my-6" v-for="(post) in allPosts">
-      <div class="my-1 flex gap-2 font-medium">
-        <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
-        <div>{{ getPostDate(post.dateline) }}</div>
-        <div class="ml-auto">#{{ post.position }}</div>
-      </div>
-      <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
+    <div class="border-b-2 w-full" v-for="block in allPosts">
+      <div class="my-6" v-for="post in block">
+        <div class="my-1 flex gap-2 font-medium">
+          <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
+          <div>{{ getPostDate(post.dateline) }}</div>
+          <div class="ml-auto">#{{ post.position }}</div>
+        </div>
+        <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
+        </div>
       </div>
     </div>
     <InfiniteLoading @infinite="load" />
