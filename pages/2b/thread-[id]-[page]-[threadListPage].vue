@@ -11,29 +11,30 @@ const route = useRoute();
 const isShowImg = ref(false);
 
 const threadKey = `thread-${route.params.id}-page`;
-let pageNum = parseInt(localStorage.getItem(threadKey) || route.params.page);
 
-let scrollTopPage = pageNum - 1;
-let scrollBottomPage = pageNum;
+const pageNum = ref(parseInt(localStorage.getItem(threadKey) || route.params.page));
+
+let scrollTopPage = pageNum.value - 1;
+let scrollBottomPage = pageNum.value;
 let loading = true;
 
-let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${pageNum}-${route.params.threadListPage}.html`
+let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${pageNum.value}-${route.params.threadListPage}.html`
 
 const load = async ($state, isTop=false) => {
   console.log("loading...");
   
   if(isTop){
-    pageNum = scrollTopPage;
+    pageNum.value = scrollTopPage;
   }else{
-    pageNum = scrollBottomPage;
+    pageNum.value = scrollBottomPage;
   }
   try {
-    localStorage.setItem(threadKey, pageNum);
+    localStorage.setItem(threadKey, pageNum.value);
 
     let formData = new FormData();
     formData.append('sid', localStorage.getItem("sid"));
     formData.append('tid', route.params.id);
-    formData.append('pageNo', pageNum);
+    formData.append('pageNo', pageNum.value);
 
     const response = await fetch(apiPostList, {
       method: "POST",
@@ -49,10 +50,10 @@ const load = async ($state, isTop=false) => {
     console.log(data)
     if(isTop){
       allPosts.value.unshift(data.data.list);
-      scrollTopPage = pageNum - 1;
+      scrollTopPage = pageNum.value - 1;
     }else{
       allPosts.value.push(data.data.list);
-      scrollBottomPage = pageNum + 1;
+      scrollBottomPage = pageNum.value + 1;
     }
 
     // There are 30 posts in one page if it's not end
@@ -79,18 +80,16 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <Menu>
+      <input v-model="pageNum" type="range" class="slider menu-item" min="0" max="100" />
+      <input v-model="pageNum" type="number" class="menu-item"/>
       <a :href="threadOrigUrl" target="_blank" class="
-                    block
-                    px-4
-                    py-2
-                    text-sm
-                    hover:bg-blue-400 hover:text-blue-100">Original Post</a>
+                    menu-item
+                    hover:bg-blue-400
+                    hover:text-blue-100">Original Post</a>
       <button @click="toggleShowImg" class="
-            block
-            px-4
-            py-2
-            text-sm
-            hover:bg-blue-400 hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
+            menu-item
+            hover:bg-blue-400
+            hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </Menu>
     <InfiniteLoading v-if="scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
     <div class="border-b-2 w-full" v-for="page in allPosts">
@@ -111,6 +110,13 @@ function toggleShowImg() {
 <style>
 img {
   display: inline;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.0rem;
+  text-align: left;
 }
 
 img[id^=aimg_] {
