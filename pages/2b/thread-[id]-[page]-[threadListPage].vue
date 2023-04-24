@@ -82,7 +82,7 @@ function toggleShowImg() {
 <template>
   <div class="m-4 text-slate-600">
     <Menu>
-      <input v-model="pageNum" type="range" class="slider menu-item" min="1" :max="Math.floor(totalReplies/30)+1" />
+      <input v-model="pageNum" type="range" class="slider menu-item" min="1" :max="Math.ceil(totalReplies/30)" />
       <input v-model="pageNum" type="number" class="menu-item"/>
       <a :href="threadOrigUrl" target="_blank" class="
                     menu-item
