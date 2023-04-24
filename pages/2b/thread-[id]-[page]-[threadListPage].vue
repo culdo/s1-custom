@@ -23,6 +23,7 @@ let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${pageNum.value}-${ro
 
 const load = async ($state, isTop=false) => {
   console.log("loading...");
+  loading = true;
   
   if(isTop){
     pageNum.value = scrollTopPage;
@@ -77,19 +78,24 @@ function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
 }
 
+function jumpToPage(e) {
+  pageNum.value = parseInt(e.target.value);
+  scrollTopPage = pageNum.value - 1;
+  scrollBottomPage = pageNum.value;
+  allThreads.value = [];
+}
+
 </script>
 
 <template>
   <div class="m-4 text-slate-600">
     <Menu>
-      <input v-model="pageNum" type="range" class="slider menu-item" min="1" :max="Math.ceil(totalReplies/30)" />
-      <input v-model="pageNum" type="number" class="menu-item"/>
+      <input :value="pageNum" @input="jumpToPage" type="range" class="slider " min="1" :max="Math.ceil(totalReplies/30)" />
+      <input :value="pageNum" @input="jumpToPage" type="number" class=""/>
       <a :href="threadOrigUrl" target="_blank" class="
-                    menu-item
                     hover:bg-blue-400
                     hover:text-blue-100">Original Post</a>
       <button @click="toggleShowImg" class="
-            menu-item
             hover:bg-blue-400
             hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
     </Menu>
@@ -112,13 +118,6 @@ function toggleShowImg() {
 <style>
 img {
   display: inline;
-}
-
-.menu-item {
-  display: block;
-  width: 100%;
-  padding: 0.5rem 1.0rem;
-  text-align: left;
 }
 
 img[id^=aimg_] {

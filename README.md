@@ -28,6 +28,6 @@ Related file locate at `.github/workflows`
 ## To-do-list
 - [x] three dots menu
 - [ ] jump to specific post
-- [ ] jump to specific page
+- [x] jump to specific page
 - [x] cast dark magic
 - [x] link post author to author space

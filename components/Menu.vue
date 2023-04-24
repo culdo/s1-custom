@@ -25,7 +25,18 @@ const showMenu = ref(false);
                 shadow-xl
                 w-44
                 ">
-            <slot></slot>
+            <slot class="menu-item"></slot>
         </div>
     </div>
 </template>
+
+<style>
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.0rem;
+  text-align: left;
+}
+
+</style>
