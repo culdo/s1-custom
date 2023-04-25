@@ -5,6 +5,7 @@ if(localStorage.getItem("sid") === undefined) {
 }
 
 const route = useRoute();
+const imgToggler = ref(null);
 
 async function fetcher(pageNum) {
   let formData = new FormData();
@@ -28,12 +29,12 @@ async function fetcher(pageNum) {
 
 <template>
   <InfLoadingPage :localStorgeKey="`thread-${route.params.id}-page`" :fetcher="fetcher" :itemPerPage=30 >
-    <template v-slot:menu="props">
-      <a :href="getThreadOrigUrl(route, props.pageNum)" target="_blank" class="
+    <template v-slot:menu="menuProps">
+      <a :href="getThreadOrigUrl(route, menuProps.pageNum)" target="_blank" class="
                     menu-item
                     hover:bg-blue-400
                     hover:text-blue-100">Original Post</a>
-      <ImgToggler class="menu-item" />
+      <ImgToggler class="menu-item" ref="imgToggler" />
     </template>
     <template v-slot:content="props">
       <div class="border-b-2 w-full" v-for="page in props.allItemList">
@@ -43,7 +44,7 @@ async function fetcher(pageNum) {
             <div>{{ getPostDate(post.dateline) }}</div>
             <div class="ml-auto">#{{ post.position }}</div>
           </div>
-          <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
+          <div class="post" :class="[imgToggler.isShowImg ? '' : 'hideImg']" v-html="post.message">
           </div>
         </div>
       </div>

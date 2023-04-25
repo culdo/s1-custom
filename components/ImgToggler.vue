@@ -4,6 +4,8 @@ const isShowImg = ref(false);
 function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
 }
+
+defineExpose({isShowImg});
 </script>
 
 <template>
