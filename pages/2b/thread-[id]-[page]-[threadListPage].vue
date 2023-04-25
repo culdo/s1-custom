@@ -1,118 +1,54 @@
 <script setup>
-import InfiniteLoading from "v3-infinite-loading";
 
 if(localStorage.getItem("sid") === undefined) {
   navigateTo("/login")
 }
 
-let allPosts = ref([]);
-
 const route = useRoute();
-const isShowImg = ref(false);
 
-const threadKey = `thread-${route.params.id}-page`;
+async function fetcher(pageNum) {
+  let formData = new FormData();
+  formData.append('sid', localStorage.getItem("sid"));
+  formData.append('tid', route.params.id);
+  formData.append('pageNo', pageNum.value);
 
-const pageNum = ref(parseInt(localStorage.getItem(threadKey) || route.params.page));
-
-let scrollTopPage = pageNum.value - 1;
-let scrollBottomPage = pageNum.value;
-let loading = true;
-let totalReplies;
-
-let threadOrigUrl = apiWebUrl + `thread-${route.params.id}-${pageNum.value}-${route.params.threadListPage}.html`
-
-const load = async ($state, isTop=false) => {
-  console.log("loading...");
-  loading = true;
-  
-  if(isTop){
-    pageNum.value = scrollTopPage;
-  }else{
-    pageNum.value = scrollBottomPage;
-  }
-  try {
-    localStorage.setItem(threadKey, pageNum.value);
-
-    let formData = new FormData();
-    formData.append('sid', localStorage.getItem("sid"));
-    formData.append('tid', route.params.id);
-    formData.append('pageNo', pageNum.value);
-
-    const response = await fetch(apiPostList, {
-      method: "POST",
-      credentials: 'include',
-      body:formData,
-    });
-    const data = await response.json();
-    totalReplies = data.data.totalCount;
-    
-    if(data.code == 501) {
+  const response = await fetch(apiPostList, {
+    method: "POST",
+    credentials: 'include',
+    body:formData,
+  });
+  const data = await response.json();
+  if(data.code == 501) {
       navigateTo("/login")
-    }
-
-    console.log(data)
-    if(isTop){
-      allPosts.value.unshift(data.data.list);
-      scrollTopPage = pageNum.value - 1;
-    }else{
-      allPosts.value.push(data.data.list);
-      scrollBottomPage = pageNum.value + 1;
-    }
-
-    // There are 30 posts in one page if it's not end
-    if (data.data.list.length < 30) {
-      $state.complete();
-    } else {
-      $state.loaded();
-    }
-
-    loading = false;
-
-  } catch (error) {
-    console.log(error);
-    $state.error();
   }
-}
-
-function toggleShowImg() {
-  isShowImg.value = !isShowImg.value;
-}
-
-function jumpToPage(e) {
-  pageNum.value = parseInt(e.target.value);
-  scrollTopPage = pageNum.value - 1;
-  scrollBottomPage = pageNum.value;
-  allThreads.value = [];
+  return [data.data.list, parseInt(data.data.totalCount)];
 }
 
 </script>
 
 <template>
-  <div class="m-4 text-slate-600">
-    <Menu>
-      <input :value="pageNum" @input="jumpToPage" type="range" class="slider " min="1" :max="Math.ceil(totalReplies/30)" />
-      <input :value="pageNum" @input="jumpToPage" type="number" class=""/>
-      <a :href="threadOrigUrl" target="_blank" class="
+  <InfLoadingPage :localStorgeKey="`thread-${route.params.id}-page`" :fetcher="fetcher" :itemPerPage=30 >
+    <template v-slot:menu="props">
+      <a :href="getThreadOrigUrl(route, props.pageNum)" target="_blank" class="
+                    menu-item
                     hover:bg-blue-400
                     hover:text-blue-100">Original Post</a>
-      <button @click="toggleShowImg" class="
-            hover:bg-blue-400
-            hover:text-blue-100">{{ isShowImg ? "Hide" : "Show" }} Img</button>
-    </Menu>
-    <InfiniteLoading v-if="scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
-    <div class="border-b-2 w-full" v-for="page in allPosts">
-      <div class="my-6" v-for="post in page">
-        <div class="my-1 flex gap-2 font-medium">
-          <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
-          <div>{{ getPostDate(post.dateline) }}</div>
-          <div class="ml-auto">#{{ post.position }}</div>
-        </div>
-        <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
+      <ImgToggler class="menu-item" />
+    </template>
+    <template v-slot:content="props">
+      <div class="border-b-2 w-full" v-for="page in props.allItemList">
+        <div class="my-6" v-for="post in page">
+          <div class="my-1 flex gap-2 font-medium">
+            <a :href="apiBaseUrl + post.authorid" target="_blank">{{ post.author }}</a>
+            <div>{{ getPostDate(post.dateline) }}</div>
+            <div class="ml-auto">#{{ post.position }}</div>
+          </div>
+          <div class="post" :class="[isShowImg ? '' : 'hideImg']" v-html="post.message">
+          </div>
         </div>
       </div>
-    </div>
-    <InfiniteLoading @infinite="load" />
-  </div>
+    </template>
+  </InfLoadingPage>
 </template>
 
 <style>
