@@ -11,7 +11,7 @@ async function fetcher(pageNum) {
   let formData = new FormData();
   formData.append('sid', localStorage.getItem("sid"));
   formData.append('tid', route.params.id);
-  formData.append('pageNo', pageNum.value);
+  formData.append('pageNo', pageNum);
 
   const response = await fetch(apiPostList, {
     method: "POST",
