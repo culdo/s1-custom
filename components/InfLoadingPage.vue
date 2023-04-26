@@ -39,7 +39,7 @@ const load = async ($state, isTop=false) => {
         }
     
         // There are 50 threads in one page if it's not end
-        if (itemList.length < itemPerPage ) {
+        if (totalItems - (pageNum.value * itemPerPage) <= 0 ) {
             $state.complete();
         } else {
             $state.loaded();
