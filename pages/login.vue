@@ -9,12 +9,9 @@ const updateConfig = async () => {
       method: "POST",
       body: new FormData(loginRef.value)
     });
-    
     const data = await response.json()
 
-    console.log(data)
     localStorage.setItem("sid", data.data.sid)
-    console.log(localStorage.getItem("sid"))
     
     await navigateTo('/')
 }
