@@ -12,7 +12,7 @@ function filterImgAttr(msg) {
   el.innerHTML = msg;
   let imgs = el.getElementsByTagName( 'img' );
   Array.from(imgs).forEach(img => {
-    if(img.hasAttribute(id)) {
+    if(img.hasAttribute("id")) {
       img.removeAttribute("onclick");
       img.removeAttribute("onmouseover");
       img.removeAttribute("onload");
