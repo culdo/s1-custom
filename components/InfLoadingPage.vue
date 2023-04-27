@@ -62,14 +62,16 @@ function jumpToPage(e) {
 </script>
 
 <template>
-    <div class="m-4 text-slate-600">
+    <div class="m-4 text-slate-600 ">
         <Menu>
             <input :value="pageNum" @input="jumpToPage" type="range" class="slider menu-item" min="1" :max="Math.ceil(totalItems/itemPerPage)" />
             <input :value="pageNum" @input="jumpToPage" type="number" class="menu-item"/>
             <slot name="menu" :pageNum="pageNum"></slot>
         </Menu>
-        <InfiniteLoading v-if="allItemList.length > 0 && scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
-        <slot name="content" :allItemList="allItemList"></slot>
-        <InfiniteLoading v-if="!isDone" @infinite="load" />
+        <div class="flex flex-col items-center">
+            <InfiniteLoading v-if="allItemList.length > 0 && scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
+            <slot name="content" :allItemList="allItemList"></slot>
+            <InfiniteLoading v-if="!isDone" @infinite="load" />
+        </div>
     </div>
 </template>
