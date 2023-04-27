@@ -7,6 +7,20 @@ if(localStorage.getItem("sid") === undefined) {
 const route = useRoute();
 const imgToggler = ref(null);
 
+function filterImgAttr(msg) {
+  let el = document.createElement( 'html' );
+  el.innerHTML = msg;
+  let imgs = el.getElementsByTagName( 'img' );
+  Array.from(imgs).forEach(img => {
+    if(img.id) {
+      img.removeAttribute("onclick");
+      img.removeAttribute("onmouseover");
+      img.removeAttribute("onload");
+    }
+  });
+  return el.innerHTML;
+}
+
 async function fetcher(pageNum) {
   let formData = new FormData();
   formData.append('sid', localStorage.getItem("sid"));
@@ -44,7 +58,7 @@ async function fetcher(pageNum) {
             <div>{{ getPostDate(post.dateline) }}</div>
             <div class="ml-auto">#{{ post.position }}</div>
           </div>
-          <div class="post" :class="[imgToggler.isShowImg ? '' : 'hideImg']" v-html="post.message">
+          <div class="post" :class="[imgToggler.isShowImg ? '' : 'hideImg']" v-html="filterImgAttr(post.message)">
           </div>
         </div>
       </div>
