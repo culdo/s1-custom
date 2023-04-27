@@ -16,6 +16,7 @@ let scrollTopPage = pageNum.value - 1;
 let scrollBottomPage = pageNum.value;
 let loading = true;
 let itemList, totalItems;
+let isDone = false;
 
 const load = async ($state, isTop=false) => {
     console.log("loading...");
@@ -40,7 +41,7 @@ const load = async ($state, isTop=false) => {
     
         // There are 50 threads in one page if it's not end
         if (totalItems - (pageNum.value * itemPerPage) <= 0 ) {
-            $state.complete();
+            isDone = true;
         } else {
             $state.loaded();
         }
@@ -51,6 +52,7 @@ const load = async ($state, isTop=false) => {
 }
 
 function jumpToPage(e) {
+    isDone = false;
     pageNum.value = parseInt(e.target.value);
     scrollTopPage = pageNum.value - 1;
     scrollBottomPage = pageNum.value;
@@ -68,6 +70,6 @@ function jumpToPage(e) {
         </Menu>
         <InfiniteLoading v-if="allItemList.length > 0 && scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
         <slot name="content" :allItemList="allItemList"></slot>
-        <InfiniteLoading @infinite="load" />
+        <InfiniteLoading v-if="!isDone" @infinite="load" />
     </div>
 </template>
