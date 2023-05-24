@@ -13,7 +13,7 @@ const updateConfig = async () => {
 
     localStorage.setItem("sid", data.data.sid)
     
-    await navigateTo('/')
+    history.back();
 }
 </script>
 <template>
