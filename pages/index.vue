@@ -4,6 +4,26 @@ const response = await fetch(apiGetForums);
 const data = await response.json();
 const totalThreads = parseInt(data.Variables.forumlist[1].threads);
 
+const setReplies = (thread) => {
+  localStorage.setItem(`${thread.tid}-replies`, thread.replies)
+}
+
+const getPrevReplies = (thread) => {
+  return parseInt(localStorage.getItem(`${thread.tid}-replies`))
+}
+
+const showRepliesDiff = (thread) => {
+  const replies = getPrevReplies(thread);
+  if(replies) {
+    const diff = parseInt(thread.replies) - getPrevReplies(thread)
+    if(diff < 0) {
+      return `(${diff})`
+    }else {
+      return `(+${diff})`
+    }
+  }
+}
+
 async function fetcher(pageNum) {
   const threadListUrl = getApiThreadList(6, pageNum);
 
@@ -19,7 +39,7 @@ async function fetcher(pageNum) {
     <template v-slot:content="props">
       <div class="flex flex-col items-center border-b-2 w-full" v-for="page in props.allItemList">
         <div v-for="thread in page">
-          <a :href="getThreadLink(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }}</b></a>
+          <a :href="getThreadLink(thread)" @click="setReplies(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }} {{ showRepliesDiff(thread) }}</b></a>
         </div>
         <hr>
       </div>
