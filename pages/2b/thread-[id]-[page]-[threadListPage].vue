@@ -67,6 +67,11 @@ async function fetcher(pageNum) {
 </template>
 
 <style>
+
+.quote{
+  color: #999999
+}
+
 img {
   display: inline;
 }
