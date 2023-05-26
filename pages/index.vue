@@ -15,7 +15,7 @@ const getPrevReplies = (thread) => {
 const showRepliesDiff = (thread) => {
   const replies = getPrevReplies(thread);
   if(replies) {
-    const diff = parseInt(thread.replies) - getPrevReplies(thread)
+    const diff = parseInt(thread.replies) - replies
     if(diff < 0) {
       return `(${diff})`
     }else {
@@ -39,7 +39,7 @@ async function fetcher(pageNum) {
     <template v-slot:content="props">
       <div class="flex flex-col items-center border-b-2 w-full" v-for="page in props.allItemList">
         <div v-for="thread in page">
-          <a :href="getThreadLink(thread)" @click="setReplies(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }} {{ showRepliesDiff(thread) }}</b></a>
+          <a :href="getThreadLink(thread)" :class="showRepliesDiff(thread) ? 'text-slate-400' : null" @click="setReplies(thread)">{{ thread.subject }}&nbsp;&nbsp;<b>{{ thread.replies }} <span class="text-slate-600">{{ showRepliesDiff(thread) }}</span></b></a>
         </div>
         <hr>
       </div>
