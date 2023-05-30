@@ -69,7 +69,7 @@ async function fetcher(pageNum) {
 <style>
 
 .quote{
-  color: #999999
+  color: #7b7b7b
 }
 
 img {
