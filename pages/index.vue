@@ -39,10 +39,16 @@ async function fetcher(pageNum) {
     <template v-slot:content="props">
       <div class="flex flex-col items-center border-b-2 w-full" v-for="page in props.allItemList">
         <div v-for="thread in page">
-          <a :href="getThreadLink(thread)" :class="showRepliesDiff(thread) ? 'text-slate-400' : null" @click="setReplies(thread)">{{ thread.subject }}&nbsp;&nbsp;<b class="text-emerald-800">{{ thread.replies }} {{ showRepliesDiff(thread) }}</b></a>
+          <a :href="getThreadLink(thread)" :class="'thread-title ' + (showRepliesDiff(thread) ? 'text-slate-400' : null)" @click="setReplies(thread)">{{ thread.subject }}&nbsp;&nbsp;<b class="text-emerald-800">{{ thread.replies }} {{ showRepliesDiff(thread) }}</b></a>
         </div>
         <hr>
       </div>
     </template>
   </InfLoadingPage>
 </template>
+
+<style>
+.thread-title:visited {
+  color: rgb(148 163 184);
+}
+</style>
