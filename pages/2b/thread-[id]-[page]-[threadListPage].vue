@@ -23,8 +23,9 @@ function filterImgAttr(msg) {
 
 async function fetcher(pageNum) {
   let formData = new FormData();
+  let tid = route.params.id;
   formData.append('sid', localStorage.getItem("sid"));
-  formData.append('tid', route.params.id);
+  formData.append('tid', tid);
   formData.append('pageNo', pageNum);
 
   const response = await fetch(apiPostList, {
@@ -36,6 +37,9 @@ async function fetcher(pageNum) {
   if(data.code == 501) {
       navigateTo("/login")
   }
+  const totalReplies = data.data.totalCount
+  localStorage.setItem(`${tid}-replies`, totalReplies+1)
+  
   return [data.data.list, parseInt(data.data.totalCount)];
 }
 
