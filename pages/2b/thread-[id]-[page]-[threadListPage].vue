@@ -37,8 +37,8 @@ async function fetcher(pageNum) {
   if(data.code == 501) {
       navigateTo("/login")
   }
-  const totalReplies = data.data.totalCount
-  localStorage.setItem(`${tid}-replies`, totalReplies+1)
+  const totalReplies = data.data.totalCount - 1
+  localStorage.setItem(`${tid}-replies`, totalReplies)
   
   return [data.data.list, parseInt(data.data.totalCount)];
 }
