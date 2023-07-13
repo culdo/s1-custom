@@ -39,7 +39,7 @@ async function fetcher(pageNum) {
     <template v-slot:content="props">
       <div class="flex flex-col items-center border-b-2 w-full" v-for="page in props.allItemList">
         <div v-for="thread in page">
-          <a target="_blank" :href="getThreadLink(thread)" @click="setReplies(thread)" :class="'thread-title ' + (showRepliesDiff(thread) ? 'text-slate-400' : null)" >
+          <a target="_blank" :href="getThreadLink(thread)" @click="setReplies(thread)" :class="'thread-title ' + (showRepliesDiff(thread) ? 'text-slate-400' : '')" >
             {{ thread.subject }}&nbsp;&nbsp;<b class="text-emerald-800">{{ thread.replies }} {{ thread.clicked ? "(+0)" : showRepliesDiff(thread) }}</b>
           </a>
         </div>
