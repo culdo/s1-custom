@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'Custom Stage1st site.' }
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: 'http://static.saraba1st.com/image/smiley/face2017/068.png' }]
+      link: [{ rel: 'icon', type: 'image/x-icon', href: 'https://static.saraba1st.com/image/smiley/face2017/068.png' }]
     }
   },
   css: [
