@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       meta: [
         { name: 'description', content: 'Custom Stage1st site.' }
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      link: [{ rel: 'icon', type: 'image/x-icon', href: (process.env.NUXT_APP_BASE_URL ? process.env.NUXT_APP_BASE_URL : "") + '/favicon.ico' }]
     }
   },
   css: [
