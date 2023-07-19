@@ -22,6 +22,16 @@ function filterImgAttr(msg) {
   return el.innerHTML;
 }
 
+const post = ref(null)
+onMounted(()=> {
+  const imgs = post.value.querySelectorAll(".post-img")
+  imgs.forEach(img => {
+    img.addEventListener("click", (e)=>{
+      swapSrcTemp(img)
+    })
+  })
+})
+
 </script>
 
 <template>
@@ -30,7 +40,7 @@ function filterImgAttr(msg) {
     <div>{{ getPostDate(data.dateline) }}</div>
     <div class="ml-auto">#{{ data.position }}</div>
   </div>
-  <div class="post" v-html="filterImgAttr(data.message)">
+  <div ref="post" class="post" v-html="filterImgAttr(data.message)">
   </div>
 </template>
 

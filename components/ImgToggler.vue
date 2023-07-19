@@ -5,12 +5,7 @@ function toggleShowImg() {
   isShowImg.value = !isShowImg.value;
   const allImgs = document.querySelectorAll(".post-img")
   allImgs.forEach(img => {
-    if(isShowImg.value) {
-      img.setAttribute("src", img.getAttribute("data-src"))
-    } else {
-      img.setAttribute("data-src", img.getAttribute("src"))
-      img.setAttribute("src", "placeholder.jpg")
-    }
+    swapSrcTemp(img)
   });
 }
 
