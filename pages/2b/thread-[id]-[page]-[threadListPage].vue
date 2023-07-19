@@ -49,23 +49,3 @@ async function fetcher(pageNum) {
     </template>
   </InfLoadingPage>
 </template>
-
-<style>
-
-.quote{
-  color: #7b7b7b
-}
-
-img {
-  display: inline;
-}
-
-img[id^=aimg_] {
-  width: 800px;
-}
-
-.hideImg img[id^=aimg_], .hideImg img[src^="https://img.saraba1st.com/"]{
-  display: none;
-}
-
-</style>
