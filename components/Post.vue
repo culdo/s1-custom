@@ -13,7 +13,7 @@ function filterImgAttr(msg) {
       img.setAttribute("class", "post-img")
       img.setAttribute("data-src", img.getAttribute('src'))
       img.setAttribute("src", "placeholder.jpg")
-      img.setAttribute("alt", "img")
+      img.setAttribute("alt", "click to show")
       img.removeAttribute("onclick");
       img.removeAttribute("onmouseover");
       img.removeAttribute("onload");
@@ -55,6 +55,7 @@ img {
 
 .post-img {
   width: 800px;
+  cursor: pointer;
 }
 
 </style>
