@@ -1,4 +1,6 @@
 <script setup>
+import { apiGetRateList } from '~~/utils/common';
+
 const { data, imgToggler } = defineProps({
   data: Object,
   imgToggler: Object,
@@ -23,14 +25,27 @@ function filterImgAttr(msg) {
 }
 
 const post = ref(null)
-onMounted(()=> {
+onMounted(() => {
   const imgs = post.value.querySelectorAll(".post-img")
   imgs.forEach(img => {
-    img.addEventListener("click", (e)=>{
+    img.addEventListener("click", (e) => {
       swapSrcTemp(img)
     })
   })
 })
+
+async function getRates(tid, pid) {
+  const resp = await fetch(apiGetRateList + `&tid=${tid}&pid=${pid}`, {
+    credentials: "include",
+  })
+  const parser = new DOMParser()
+  const xml = parser.parseFromString(resp.text, 'text/xml').documentElement;
+  const cdata = xml.getElementsByTagName('root')?.firstChild?.wholeText?.trim();
+  console.log(cdata)
+  return cdata
+}
+
+const rates = await getRates(data.tid, data.pid)
 
 </script>
 
@@ -39,6 +54,7 @@ onMounted(()=> {
     <a :href="apiBaseUrl + data.authorid" target="_blank">{{ data.author }}</a>
     <div>{{ getPostDate(data.dateline) }}</div>
     <div class="ml-auto">#{{ data.position }}</div>
+    <!-- <div v-html="rates"></div> -->
   </div>
   <div ref="post" class="post" v-html="filterImgAttr(data.message)">
   </div>
@@ -57,5 +73,4 @@ img {
   width: 800px;
   cursor: pointer;
 }
-
 </style>
