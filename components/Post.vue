@@ -54,7 +54,7 @@ const rates = await getRates(data.tid, data.pid)
     <a :href="apiBaseUrl + data.authorid" target="_blank">{{ data.author }}</a>
     <div>{{ getPostDate(data.dateline) }}</div>
     <div class="ml-auto">#{{ data.position }}</div>
-    <!-- <div v-html="rates"></div> -->
+    <div v-html="rates"></div>
   </div>
   <div ref="post" class="post" v-html="filterImgAttr(data.message)">
   </div>
