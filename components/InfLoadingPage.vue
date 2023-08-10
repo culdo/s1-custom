@@ -11,6 +11,7 @@ let allItemList = ref([]);
 
 const route = useRoute();
 const pageNum = ref(parseInt(localStorage.getItem(localStorgeKey) || route.params.page || 1));
+defineExpose({pageNum})
 
 let scrollTopPage = pageNum.value - 1;
 let scrollBottomPage = pageNum.value;

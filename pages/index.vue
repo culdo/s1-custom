@@ -37,7 +37,7 @@ async function fetcher(pageNum) {
 <template>
   <InfLoadingPage localStorgeKey="thread-list-page" :fetcher="fetcher" :itemPerPage=50 >
     <template v-slot:content="props">
-      <div class="flex flex-col items-center border-b-2 w-full" v-for="page in props.allItemList">
+      <div :id="`page-${idx+1}`" class="page flex flex-col items-center border-b-2 w-full" v-for="(page, idx) in props.allItemList">
         <div v-for="thread in page">
           <a target="_blank" :href="getThreadLink(thread)" @click="setReplies(thread)" :class="(showRepliesDiff(thread)||thread.clicked ? 'text-slate-400' : '')" >
             {{ thread.subject }}&nbsp;&nbsp;
