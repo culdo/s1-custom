@@ -10,10 +10,10 @@ const { localStorgeKey, itemPerPage, fetcher } = defineProps({
 let allItemList = ref([]);
 
 const route = useRoute();
-const pageNum = ref(parseInt(localStorage.getItem(localStorgeKey) || route.params.page || 1));
-defineExpose({pageNum})
+const pageNum = ref(parseInt(localStorage.getItem(localStorgeKey) || route.params.page) || 1);
+defineExpose({pageNum, localStorgeKey})
 
-let scrollTopPage = pageNum.value - 1;
+let scrollTopPage = pageNum.value;
 let scrollBottomPage = pageNum.value;
 let loading = true;
 let itemList, totalItems;
@@ -24,19 +24,22 @@ const load = async ($state, isTop=false) => {
     loading = true;
     
     if(isTop){
+        if(scrollTopPage > 1) {
+            scrollTopPage -= 1
+        }
         pageNum.value = scrollTopPage;
     }else{
         pageNum.value = scrollBottomPage;
     }
     try {
+
         localStorage.setItem(localStorgeKey, pageNum.value);
-        [itemList, totalItems] = await fetcher(pageNum.value);
-    
+        const [itemList, totalItems] = await fetcher(pageNum.value);
         if(isTop){
-            allItemList.value.unshift(itemList);
-            scrollTopPage = pageNum.value - 1;
+            allItemList.value.unshift([itemList, pageNum.value]);
+
         }else{
-            allItemList.value.push(itemList);
+            allItemList.value.push([itemList, pageNum.value]);
             scrollBottomPage = pageNum.value + 1;
         }
     
@@ -70,7 +73,7 @@ function jumpToPage(e) {
             <slot name="menu" :pageNum="pageNum"></slot>
         </Menu>
         <div class="flex flex-col items-center">
-            <InfiniteLoading v-if="allItemList.length > 0 && scrollTopPage > 0 && !loading" top=true @infinite="load($event, true)" />
+            <InfiniteLoading v-if="allItemList.length > 0 && scrollTopPage > 1 && !loading" :top="true" @infinite="load($event, true)" />
             <slot name="content" :allItemList="allItemList"></slot>
             <InfiniteLoading v-if="!isDone" @infinite="load" />
         </div>

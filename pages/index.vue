@@ -3,6 +3,7 @@
 const response = await fetch(apiGetForums);
 const data = await response.json();
 const totalThreads = parseInt(data.Variables.forumlist[1].threads);
+const ilp = ref(null)
 
 const setReplies = (thread) => {
   thread.clicked = true
@@ -35,20 +36,22 @@ async function fetcher(pageNum) {
 </script>
 
 <template>
-  <InfLoadingPage localStorgeKey="thread-list-page" :fetcher="fetcher" :itemPerPage=50 >
+  <InfLoadingPages ref="ilp" localStorgeKey="thread-list-page" :fetcher="fetcher" :itemPerPage=50 >
     <template v-slot:content="props">
-      <div :id="`page-${idx+1}`" class="page flex flex-col items-center border-b-2 w-full" v-for="(page, idx) in props.allItemList">
-        <div v-for="thread in page">
-          <a target="_blank" :href="getThreadLink(thread)" @click="setReplies(thread)" :class="(showRepliesDiff(thread)||thread.clicked ? 'text-slate-400' : '')" >
-            {{ thread.subject }}&nbsp;&nbsp;
-            <b v-if="Number(thread.readperm) > 0">閱讀權限 [{{ thread.readperm }}]&nbsp;&nbsp;</b>
-            <b class="text-emerald-800">{{ thread.replies }} {{ thread.clicked ? "(+0)" : showRepliesDiff(thread) }}</b>
-          </a>
-        </div>
+      <div class="flex flex-col items-center border-b-2 w-full" v-for="[threads, pageNum] in props.allItemList">
+        <Page :ilp="ilp" :pageNum="pageNum">
+          <div v-for="thread in threads">
+            <a target="_blank" :href="getThreadLink(thread)" @click="setReplies(thread)" :class="(showRepliesDiff(thread)||thread.clicked ? 'text-slate-400' : '')" >
+              {{ thread.subject }}&nbsp;&nbsp;
+              <b v-if="Number(thread.readperm) > 0">[閱讀權限 {{ thread.readperm }}]&nbsp;&nbsp;</b>
+              <b class="text-emerald-800">{{ thread.replies }} {{ thread.clicked ? "(+0)" : showRepliesDiff(thread) }}</b>
+            </a>
+          </div>
+        </Page>
         <hr>
       </div>
     </template>
-  </InfLoadingPage>
+  </InfLoadingPages>
 </template>
 
 <style>

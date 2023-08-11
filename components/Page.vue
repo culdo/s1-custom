@@ -3,27 +3,27 @@ import { vIntersectionObserver } from '@vueuse/components'
 
 const route = useRoute()
 
-const { ilp, data, pageNo } = defineProps(["ilp", "data", "pageNo"])
+const { ilp, pageNum } = defineProps(["ilp", "pageNum"])
+console.log(`setup pageNum: ${pageNum}`)
 
 function onIntersection(entries, opts) {
-    entries.forEach(entry => {
-        console.log(entry.target)
-        localStorage.setItem(`thread-${route.params.id}-page`, pageNo)
-        console.log(`scrollto page ${pageNo}`)
-        if (ilp) {
-            console.log(ilp.pageNum)
-            ilp.pageNum = Number(pageNo)
+    entries.forEach(({target, isIntersecting}) => {
+        if(isIntersecting) {
+            console.log(target)
+            console.log(`target.id: ${target.id}`)
+            console.log(`ilp.pageNum: ${ilp.pageNum}`)
+            localStorage.setItem(ilp.localStorgeKey, target.id)
+            ilp.pageNum = Number(target.id)
         }
     }
     )
+
 }
 
 
 </script>
 <template>
-    <div v-intersection-observer="[onIntersection]">
+    <div :id="pageNum" v-intersection-observer="[onIntersection]">
     </div>
-        <div class="my-6" v-for="post in data">
-            <Post :data="post"></Post>
-        </div>
+    <slot></slot>
 </template>

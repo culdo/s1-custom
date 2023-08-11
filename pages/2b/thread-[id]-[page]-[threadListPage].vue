@@ -33,7 +33,7 @@ const ilp = ref(null)
 </script>
 
 <template>
-  <InfLoadingPage ref="ilp" :localStorgeKey="`thread-${route.params.id}-page`" :fetcher="fetcher" :itemPerPage=30>
+  <InfLoadingPages ref="ilp" :localStorgeKey="`thread-${route.params.id}-page`" :fetcher="fetcher" :itemPerPage=30>
     <template v-slot:menu="menuProps">
       <a :href="getThreadOrigUrl(route, menuProps.pageNum)" target="_blank" class="
                     menu-item
@@ -42,10 +42,13 @@ const ilp = ref(null)
       <ImgToggler class="menu-item" ref="imgToggler" />
     </template>
     <template v-slot:content="pageProps">
-      <div :id="`page-${idx + 1}`" class="border-b-2 w-full"
-        v-for="(data, idx) in pageProps.allItemList" >
-          <Page :ilp="ilp" :data="data" :pageNo="idx + 1" ></Page>
+      <div class="border-b-2 w-full" v-for="[posts, pageNum] in pageProps.allItemList">
+        <Page :ilp="ilp" :pageNum="pageNum">
+          <div class="my-6" v-for="post in posts">
+            <Post :data="post"></Post>
+          </div>
+        </Page>
       </div>
     </template>
-  </InfLoadingPage>
+  </InfLoadingPages>
 </template>
