@@ -16,7 +16,7 @@ defineExpose({pageNum, localStorgeKey})
 let scrollTopPage = pageNum.value;
 let scrollBottomPage = pageNum.value;
 let loading = true;
-let itemList, totalItems;
+let totalItemsRef = ref(null);
 let isDone = false;
 
 const load = async ($state, isTop=false) => {
@@ -35,6 +35,7 @@ const load = async ($state, isTop=false) => {
 
         localStorage.setItem(localStorgeKey, pageNum.value);
         const [itemList, totalItems] = await fetcher(pageNum.value);
+        totalItemsRef.value = totalItems
         if(isTop){
             allItemList.value.unshift([itemList, pageNum.value]);
 
@@ -68,7 +69,7 @@ function jumpToPage(e) {
 <template>
     <div class="m-4 text-slate-600 ">
         <Menu>
-            <input :value="pageNum" @input="jumpToPage" type="range" class="slider menu-item" min="1" :max="Math.ceil(totalItems/itemPerPage)" />
+            <input :value="pageNum" @input="jumpToPage" type="range" class="slider menu-item" min="1" :max="Math.ceil(totalItemsRef/itemPerPage)" />
             <input :value="pageNum" @input="jumpToPage" type="number" class="menu-item"/>
             <slot name="menu" :pageNum="pageNum"></slot>
         </Menu>
